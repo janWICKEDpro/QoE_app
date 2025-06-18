@@ -21,7 +21,7 @@ class RouterClass {
   GoRouter getRoutes() {
     return GoRouter(
       debugLogDiagnostics: true,
-      initialLocation: RoutePath.splash,
+      initialLocation: RoutePath.home,
       navigatorKey: rootNavigatorKey,
       redirect: (context, state) async {
         return null;
@@ -60,6 +60,7 @@ class RouterClass {
               navigatorKey: shellNavigatorKey,
               routes: [
                 GoRoute(
+                  name: RoutePath.speedTest,
                   path: RoutePath.speedTest,
                   builder: (context, state) {
                     return const SpeedTestScreen();
@@ -71,6 +72,7 @@ class RouterClass {
               navigatorKey: shellNavigator2Key,
               routes: [
                 GoRoute(
+                  name: RoutePath.settings,
                   path: RoutePath.settings,
                   builder: (context, state) {
                     return const SettingsScreen();

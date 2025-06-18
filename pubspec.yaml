@@ -24,6 +24,12 @@ dependencies:
   geolocator: ^14.0.1
   http: ^1.4.0
   connectivity_plus: ^6.1.4
+  flutter_background_service: ^5.1.0
+  flutter_local_notifications: ^19.2.1
+  timezone: ^0.10.1
+  flutter_timezone: ^4.1.1
+  dart_ping: ^9.0.1
+  flutter_signal_strength: ^0.0.1
 
 dev_dependencies:
   flutter_test:

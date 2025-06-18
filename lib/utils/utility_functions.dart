@@ -1,8 +1,13 @@
 import 'dart:convert';
+import 'dart:io';
 
+import 'package:flutter/foundation.dart';
+import 'package:flutter_timezone/flutter_timezone.dart';
 import 'package:http/http.dart' as http;
 import 'package:qoe_app/constants/env.dart';
 import 'package:qoe_app/models/location_model.dart';
+import 'package:timezone/timezone.dart' as tz;
+import 'package:timezone/data/latest_all.dart' as tz;
 
 Future<LocationModel> getLocationName(double lat, double lon) async {
   final url = Uri.parse(
@@ -34,4 +39,17 @@ Future<LocationModel> getLocationName(double lat, double lon) async {
   } catch (e) {
     throw Exception('Error fetching location name: $e');
   }
+}
+
+
+Future<void> configureLocalTimeZone() async {
+  if (kIsWeb || Platform.isLinux) {
+    return;
+  }
+  tz.initializeTimeZones();
+  if (Platform.isWindows) {
+    return;
+  }
+  final String? timeZoneName = await FlutterTimezone.getLocalTimezone();
+  tz.setLocalLocation(tz.getLocation(timeZoneName!));
 }
