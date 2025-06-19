@@ -7,6 +7,7 @@ import 'package:qoe_app/screens/settings/settings_screen.dart';
 import 'package:qoe_app/screens/speed_test/speed_test_screen.dart';
 import 'package:qoe_app/screens/splash.dart';
 import 'package:qoe_app/screens/wrapper.dart';
+import 'package:qoe_app/widgets/dashboard.dart';
 
 class RouterClass {
   static RouterClass? _instance;
@@ -51,7 +52,7 @@ class RouterClass {
                 GoRoute(
                   path: RoutePath.home,
                   builder: (context, state) {
-                    return const HomeScreen();
+                    return const NetworkDashboardScreen();
                   },
                 ),
               ],

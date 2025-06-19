@@ -4,18 +4,73 @@ import 'dart:developer';
 import 'package:flutter/material.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:flutter_local_notifications/flutter_local_notifications.dart';
+import 'package:provider/provider.dart';
+import 'package:qoe_app/constants/env.dart';
 import 'package:qoe_app/data/local/session_manager.dart';
+import 'package:qoe_app/providers/device_info_provider.dart';
+import 'package:qoe_app/providers/network_info_provider.dart';
 import 'package:qoe_app/routes/routes.dart';
 import 'package:qoe_app/services/background_service.dart';
 import 'package:qoe_app/services/location_service.dart';
 import 'package:qoe_app/services/notification_service.dart';
+import 'package:qoe_app/supabase/auth.dart';
 import 'package:qoe_app/utils/plugin.dart';
 import 'package:qoe_app/utils/utility_functions.dart';
+import 'package:supabase_flutter/supabase_flutter.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
+  await Future.wait([
+    dotenv.load(fileName: ".env"),
+    SessionManager().init(),
+    LocationService().initialize(),
+  ]);
+  await Supabase.initialize(
+    url: EnvironmentVariables.supabaseUrl,
+    anonKey: EnvironmentVariables.supabaseAnonKey,
+  );
   await configureLocalTimeZone();
+  await initializeNotificationService();
+  final backgroundService = BackgroundService();
+  final auth = Auth();
+  auth.anonymousLogin();
+  await requestPermissions();
+  await backgroundService.initializeService();
 
+  final router = RouterClass.instance;
+
+  runApp(FeedbackApp(routes: router));
+}
+
+class FeedbackApp extends StatelessWidget {
+  final RouterClass routes;
+
+  const FeedbackApp({super.key, required this.routes});
+
+  @override
+  Widget build(BuildContext context) {
+    return MultiProvider(
+      providers: [
+        ChangeNotifierProvider(
+          create: (_) => DeviceInfoProvider()..fetchAndStoreDeviceInfo(),
+          lazy: false,
+        ),
+        ChangeNotifierProvider(create: (_) => NetworkInfoProvider()),
+      ],
+      child: MaterialApp.router(
+        title: 'Feedback',
+        theme: ThemeData(
+          colorScheme: ColorScheme.fromSeed(seedColor: Colors.deepPurple),
+          useMaterial3: true,
+        ),
+        routerConfig: routes.routes,
+        debugShowCheckedModeBanner: false,
+      ),
+    );
+  }
+}
+
+Future initializeNotificationService() async {
   const AndroidInitializationSettings initializationSettingsAndroid =
       AndroidInitializationSettings('app_icon');
 
@@ -64,8 +119,6 @@ void main() async {
         ),
       ];
 
-  /// Note: permissions aren't requested here just to demonstrate that can be
-  /// done later
   final DarwinInitializationSettings initializationSettingsDarwin =
       DarwinInitializationSettings(
         requestAlertPermission: false,
@@ -74,16 +127,9 @@ void main() async {
         notificationCategories: darwinNotificationCategories,
       );
 
-  final LinuxInitializationSettings initializationSettingsLinux =
-      LinuxInitializationSettings(
-        defaultActionName: 'Open notification',
-        defaultIcon: AssetsLinuxIcon('icons/app_icon.png'),
-      );
-
   final InitializationSettings initializationSettings = InitializationSettings(
     android: initializationSettingsAndroid,
     iOS: initializationSettingsDarwin,
-    macOS: initializationSettingsDarwin,
   );
 
   await flutterLocalNotificationsPlugin.initialize(
@@ -99,35 +145,5 @@ void main() async {
     selectedNotificationPayload =
         notificationAppLaunchDetails!.notificationResponse?.payload;
     log("Payload");
-  }
-  final backgroundService = BackgroundService();
-  await backgroundService.initializeService();
-  await Future.wait([
-    dotenv.load(fileName: ".env"),
-    SessionManager().init(),
-    LocationService().initialize(),
-  ]);
-
-  final router = RouterClass.instance;
-
-  runApp(FeedbackApp(routes: router));
-}
-
-class FeedbackApp extends StatelessWidget {
-  final RouterClass routes;
-
-  const FeedbackApp({super.key, required this.routes});
-
-  @override
-  Widget build(BuildContext context) {
-    return MaterialApp.router(
-      title: 'Feedback',
-      theme: ThemeData(
-        colorScheme: ColorScheme.fromSeed(seedColor: Colors.deepPurple),
-        useMaterial3: true,
-      ),
-      routerConfig: routes.routes,
-      debugShowCheckedModeBanner: false,
-    );
   }
 }

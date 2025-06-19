@@ -16,7 +16,6 @@ dependencies:
   go_router: ^15.2.0
   gap: ^3.0.1
   hugeicons: ^0.0.10
-  marquee: ^2.3.0
   path_provider: ^2.1.5
   permission_handler: ^11.1.0
   flutter_dotenv: ^5.2.1
@@ -30,6 +29,12 @@ dependencies:
   flutter_timezone: ^4.1.1
   dart_ping: ^9.0.1
   flutter_signal_strength: ^0.0.1
+  supabase_flutter: ^2.9.1
+  device_info_plus: ^11.5.0
+  sim_card_info: ^1.0.2
+  provider: ^6.1.5
+  mobile_number: ^3.0.0
+  get_ip_address: ^0.0.7
 
 dev_dependencies:
   flutter_test:

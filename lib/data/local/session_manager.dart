@@ -1,4 +1,3 @@
-
 import 'package:qoe_app/constants/storage_keys.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
@@ -17,13 +16,12 @@ class SessionManager {
   }
 
   Future<void> setUserToken(String token) async {
-    await _prefs?.setString(StorageKeys.userToken, token);
+    await _prefs?.setString(StorageKeys.token, token);
   }
 
   String? getUserToken() {
-    return _prefs?.getString(StorageKeys.userToken);
+    return _prefs?.getString(StorageKeys.token);
   }
-
 
   Future<void> setOnboarded(bool value) async {
     await _prefs?.setBool(StorageKeys.hasOnboarded, value);
@@ -33,14 +31,21 @@ class SessionManager {
     return _prefs?.getBool(StorageKeys.hasOnboarded) ?? false;
   }
 
-  Future<void> setProfileCompleted(bool value) async {
-    await _prefs?.setBool(StorageKeys.profileStatus, value);
+  Future<void> setHasRegisteredDevice(bool value) async {
+    await _prefs?.setBool(StorageKeys.hasRegistered, value);
   }
 
-  bool isProfileCompleted() {
-    return _prefs?.getBool(StorageKeys.profileStatus) ?? false;
+  bool hasRegisteredDevice() {
+    return _prefs?.getBool(StorageKeys.hasRegistered) ?? false;
   }
 
+  Future<void> setDeviceId(int value) async {
+    await _prefs?.setInt(StorageKeys.deviceId, value);
+  }
+
+  int deviceId() {
+    return _prefs?.getInt(StorageKeys.deviceId) ?? 0;
+  }
 
   Future<void> clearSession() async {
     await _prefs?.clear();

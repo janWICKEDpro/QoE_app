@@ -6,6 +6,8 @@ import 'package:flutter/material.dart';
 import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 import 'package:go_router/go_router.dart';
 import 'package:hugeicons/hugeicons.dart';
+import 'package:provider/provider.dart';
+import 'package:qoe_app/providers/network_info_provider.dart';
 import 'package:qoe_app/routes/route_names.dart';
 import 'package:qoe_app/services/notification_service.dart';
 import 'package:qoe_app/utils/plugin.dart';
@@ -19,6 +21,18 @@ class HomeScreen extends StatefulWidget {
 }
 
 class _HomeScreenState extends State<HomeScreen> {
+  @override
+  void initState() {
+    super.initState();
+    // Request permissions before using network/location features
+    Future.microtask(() async {
+      final networkInfoProvider = Provider.of<NetworkInfoProvider>(
+        context,
+        listen: false,
+      );
+    });
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(

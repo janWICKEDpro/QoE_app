@@ -108,8 +108,8 @@ void onStart(ServiceInstance service) async {
           ),
         );
       }
+      // print("service is successfully running ${DateTime.now().second}");
+      // log("message sent at ${DateTime.now().second}");
     }
-    print("service is successfully running ${DateTime.now().second}");
-    log("message sent at ${DateTime.now().second}");
   });
 }

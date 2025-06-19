@@ -21,8 +21,6 @@ class _WrapperState extends State<Wrapper> {
     widget.navigationShell.goBranch(index, initialLocation: true);
   }
 
-
-  bool _notificationsEnabled = false;
   @override
   initState() {
     super.initState();
@@ -33,17 +31,11 @@ class _WrapperState extends State<Wrapper> {
 
   Future<void> _isAndroidPermissionGranted() async {
     if (Platform.isAndroid) {
-      final bool granted =
-          await flutterLocalNotificationsPlugin
-              .resolvePlatformSpecificImplementation<
-                AndroidFlutterLocalNotificationsPlugin
-              >()
-              ?.areNotificationsEnabled() ??
-          false;
-
-      setState(() {
-        _notificationsEnabled = granted;
-      });
+      await flutterLocalNotificationsPlugin
+          .resolvePlatformSpecificImplementation<
+            AndroidFlutterLocalNotificationsPlugin
+          >()
+          ?.areNotificationsEnabled();
     }
   }
 
@@ -65,49 +57,10 @@ class _WrapperState extends State<Wrapper> {
               .resolvePlatformSpecificImplementation<
                 AndroidFlutterLocalNotificationsPlugin
               >();
-
-      final bool? grantedNotificationPermission =
-          await androidImplementation?.requestNotificationsPermission();
-      setState(() {
-        _notificationsEnabled = grantedNotificationPermission ?? false;
-      });
+      await androidImplementation?.requestNotificationsPermission();
     }
   }
-
-  Future<void> _requestPermissionsWithCriticalAlert() async {
-    if (Platform.isIOS || Platform.isMacOS) {
-      await flutterLocalNotificationsPlugin
-          .resolvePlatformSpecificImplementation<
-            IOSFlutterLocalNotificationsPlugin
-          >()
-          ?.requestPermissions(
-            alert: true,
-            badge: true,
-            sound: true,
-            critical: true,
-          );
-      await flutterLocalNotificationsPlugin
-          .resolvePlatformSpecificImplementation<
-            MacOSFlutterLocalNotificationsPlugin
-          >()
-          ?.requestPermissions(
-            alert: true,
-            badge: true,
-            sound: true,
-            critical: true,
-          );
-    }
-  }
-
-  Future<void> _requestNotificationPolicyAccess() async {
-    final AndroidFlutterLocalNotificationsPlugin? androidImplementation =
-        flutterLocalNotificationsPlugin
-            .resolvePlatformSpecificImplementation<
-              AndroidFlutterLocalNotificationsPlugin
-            >();
-    await androidImplementation?.requestNotificationPolicyAccess();
-  }
-
+  
   void _configureSelectNotificationSubject() {
     selectNotificationStream.stream.listen((
       NotificationResponse? response,

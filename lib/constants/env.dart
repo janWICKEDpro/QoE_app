@@ -8,4 +8,6 @@ class EnvironmentVariables {
   static final userUrl = "$BASE_URL/api";
   static final driverUrl = "$BASE_URL/api/driver";
   static final locationIQKey = "${dotenv.env['LOCATION_IQ_KEY']}";
+  static final supabaseUrl = "${dotenv.env['SUPABASE_URL']}";
+  static final supabaseAnonKey = "${dotenv.env['SUPABASE_ANON_KEY']}";
 }

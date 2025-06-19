@@ -8,6 +8,12 @@ import 'package:qoe_app/constants/env.dart';
 import 'package:qoe_app/models/location_model.dart';
 import 'package:timezone/timezone.dart' as tz;
 import 'package:timezone/data/latest_all.dart' as tz;
+import 'package:permission_handler/permission_handler.dart';
+
+Future requestPermissions() async {
+  await Permission.phone.request();
+  await Permission.location.request();
+}
 
 Future<LocationModel> getLocationName(double lat, double lon) async {
   final url = Uri.parse(
