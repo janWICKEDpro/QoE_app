@@ -12,6 +12,7 @@ import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 import 'package:network_type_detector/network_type_detector.dart';
 import 'package:qoe_app/constants/env.dart';
+import 'package:qoe_app/data/local/session_manager.dart';
 import 'package:qoe_app/supabase/db_methods.dart';
 import 'package:qoe_app/utils/plugin.dart';
 import 'package:connectivity_plus/connectivity_plus.dart';
@@ -19,7 +20,6 @@ import 'package:qoe_app/utils/utility_functions.dart';
 import 'package:supabase_flutter/supabase_flutter.dart';
 import 'package:flutter_signal_strength/flutter_signal_strength.dart';
 import 'package:sim_card_info/sim_card_info.dart';
-import 'package:device_info_plus/device_info_plus.dart';
 
 import 'package:qoe_app/services/location_service.dart';
 import 'package:qoe_app/models/statistic.dart';
@@ -86,6 +86,7 @@ void onStart(ServiceInstance service) async {
   final LocationService locationService = LocationService();
   await dotenv.load(fileName: ".env");
   await locationService.initialize();
+  SessionManager().init();
   await Supabase.initialize(
     url: EnvironmentVariables.supabaseUrl,
     anonKey: EnvironmentVariables.supabaseAnonKey,
@@ -98,40 +99,9 @@ void onStart(ServiceInstance service) async {
     lg.log("Background Service: Service stopped.");
   });
 
-  int? currentDeviceId;
-  final String? sessionToken =
-      Supabase.instance.client.auth.currentSession?.accessToken;
+  // final String? sessionToken =
+  //     Supabase.instance.client.auth.currentSession?.accessToken;
 
-  if (sessionToken != null) {
-    try {
-      final List<Map<String, dynamic>> deviceRecords = await Supabase
-          .instance
-          .client
-          .from('Device')
-          .select('id')
-          .eq('token', sessionToken)
-          .limit(1);
-
-      if (deviceRecords.isNotEmpty && deviceRecords.first['id'] != null) {
-        currentDeviceId = deviceRecords.first['id'] as int;
-        lg.log(
-          'Background Service: Found existing device ID: $currentDeviceId',
-        );
-      } else {
-        lg.log(
-          'Background Service: No device found for current session token. Device ID will be null for statistics.',
-        );
-      }
-    } catch (e) {
-      lg.log(
-        'Background Service: Error fetching device ID for session token: $e',
-      );
-    }
-  } else {
-    lg.log(
-      'Background Service: Supabase session token is null. Statistics will not be linked to a device.',
-    );
-  }
   List<double> successfulPingTimes = [];
   int packetsTransmitted = 0;
   int packetsReceived = 0;
@@ -316,7 +286,7 @@ void onStart(ServiceInstance service) async {
           lg.log('Background Service: Error getting location: $e');
         }
         final Statistic statistic = Statistic(
-          deviceId: currentDeviceId,
+          deviceId: SessionManager().deviceId(),
           carrierName: carrierName,
           jitter: calculatedJitter,
           latency: calculatedLatency,

@@ -6,6 +6,8 @@ import 'package:qoe_app/routes/route_names.dart';
 import 'package:qoe_app/providers/network_info_provider.dart';
 import 'dart:io' show Platform;
 
+import 'package:qoe_app/widgets/rating_popup.dart';
+
 class NetworkDashboardScreen extends StatefulWidget {
   const NetworkDashboardScreen({super.key});
 
@@ -47,7 +49,8 @@ class _NetworkDashboardScreenState extends State<NetworkDashboardScreen> {
               size: 30.0,
             ),
             onPressed: () {
-              context.goNamed(RoutePath.settings);
+              //context.goNamed(RoutePath.settings);
+              showISPRatingDialog(context);
             },
           ),
         ],
