@@ -504,6 +504,14 @@ packages:
       url: "https://pub.dev"
     source: hosted
     version: "1.0.0"
+  network_type_detector:
+    dependency: "direct main"
+    description:
+      name: network_type_detector
+      sha256: "0ef1c4cecb93d439e95f31481abaf439d04e2a6ee6043db4f7e024202466be75"
+      url: "https://pub.dev"
+    source: hosted
+    version: "1.0.1"
   nm:
     dependency: transitive
     description:

@@ -1,7 +1,6 @@
 import 'package:go_router/go_router.dart';
 import 'package:qoe_app/routes/navigation_keys.dart';
 import 'package:qoe_app/routes/route_names.dart';
-import 'package:qoe_app/screens/home/home_screen.dart';
 import 'package:qoe_app/screens/onboarding/onboarding_screen.dart';
 import 'package:qoe_app/screens/settings/settings_screen.dart';
 import 'package:qoe_app/screens/speed_test/speed_test_screen.dart';

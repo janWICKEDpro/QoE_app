@@ -11,6 +11,8 @@ class Statistic {
   final String? locationName; // Nullable as per Supabase table
   final double? longitude; // Renamed 'long' to 'longitude' for clarity in Dart
   final double? latitude; // Renamed 'lat' to 'latitude' for clarity in Dart
+  final String? networkType;
+  final String? ip;
 
   Statistic({
     this.id,
@@ -25,6 +27,8 @@ class Statistic {
     this.locationName,
     this.longitude,
     this.latitude,
+    this.networkType,
+    this.ip,
   });
 
   factory Statistic.fromJson(Map<String, dynamic> json) {
@@ -44,6 +48,8 @@ class Statistic {
       locationName: json['location_name'] as String?,
       longitude: json['long'] as double?, // Use 'long' from JSON
       latitude: json['lat'] as double?, // Use 'lat' from JSON
+      networkType: json['network_type'] as String?,
+      ip: json['ip'] as String?,
     );
   }
 
@@ -63,6 +69,8 @@ class Statistic {
       'location_name': locationName,
       'long': longitude,
       'lat': latitude,
+      'network_type': networkType,
+      'ip': ip,
     };
   }
 
@@ -80,6 +88,8 @@ class Statistic {
     String? locationName,
     double? longitude,
     double? latitude,
+    String? networkType,
+    String? ip,
   }) {
     return Statistic(
       id: id ?? this.id,
@@ -94,6 +104,8 @@ class Statistic {
       locationName: locationName ?? this.locationName,
       longitude: longitude ?? this.longitude,
       latitude: latitude ?? this.latitude,
+      networkType: networkType ?? this.networkType,
+      ip: ip ?? this.ip,
     );
   }
 
@@ -104,6 +116,6 @@ class Statistic {
         'carrierName: $carrierName, jitter: $jitter, latency: $latency, '
         'signalStrength: $signalStrength, packetLoss: $packetLoss, '
         'bandwidth: $bandwidth, locationName: $locationName, '
-        'longitude: $longitude, latitude: $latitude)';
+        'longitude: $longitude, latitude: $latitude, networkType: $networkType, ip: $ip)';
   }
 }

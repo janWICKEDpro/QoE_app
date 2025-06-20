@@ -2,9 +2,9 @@ import 'dart:developer';
 
 import 'package:flutter/material.dart';
 import 'package:device_info_plus/device_info_plus.dart';
-import 'package:get_ip_address/get_ip_address.dart';
 
 import 'package:qoe_app/supabase/db_methods.dart';
+import 'package:qoe_app/utils/utility_functions.dart';
 import 'package:sim_card_info/sim_card_info.dart';
 import 'package:qoe_app/services/location_service.dart';
 import 'package:qoe_app/models/device.dart';
@@ -16,7 +16,7 @@ class DeviceInfoProvider with ChangeNotifier {
   Device? _currentDevice;
 
   final DeviceInfoPlugin _deviceInfoPlugin = DeviceInfoPlugin();
-  var ipAddress = IpAddress(type: RequestType.json);
+
   final SimCardInfo _simCardInfo = SimCardInfo();
   final LocationService _locationService = LocationService();
   final DbMethods _dbMethods = DbMethods();
@@ -42,7 +42,7 @@ class DeviceInfoProvider with ChangeNotifier {
     notifyListeners();
 
     try {
-      String? ipAddress = await _fetchIpAddress();
+      String? ipAddress = await fetchIpAddress();
 
       int? numberOfSims = await _fetchNumberOfSims();
 
@@ -76,21 +76,6 @@ class DeviceInfoProvider with ChangeNotifier {
     } finally {
       _isLoading = false;
       notifyListeners();
-    }
-  }
-
-  /// Fetches the current Wi-Fi IP address.
-  Future<String?> _fetchIpAddress() async {
-    try {
-      if (Platform.isAndroid || Platform.isIOS) {
-        dynamic data = await ipAddress.getIpAddress();
-        log("${data}");
-        return "$data";
-      }
-      return null;
-    } catch (e) {
-      debugPrint('Error getting IP address: $e');
-      return null;
     }
   }
 
