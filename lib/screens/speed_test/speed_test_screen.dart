@@ -62,7 +62,7 @@ class _SpeedTestScreenState extends State<SpeedTestScreen>
     _speedTest.startTesting(
       onStarted: () {
         setState(() {
-          _testPhase = 'Testing download speed...';
+          _testPhase = 'Testing Internet speed Please stay on this screen...';
         });
       },
       onDownloadComplete: (result) {
@@ -93,7 +93,6 @@ class _SpeedTestScreenState extends State<SpeedTestScreen>
         });
       },
       fileSizeInBytes: 5000000,
-      //onDone: (TestResult download, TestResult upload) {},
       onProgress: (double percent, TestResult data) {
         setState(() {
           _uploadSpeed = data.transferRate;
@@ -273,7 +272,8 @@ class _SpeedTestScreenState extends State<SpeedTestScreen>
   }
 
   String _getResultMessage(double speed) {
-    if (speed < 5) return 'Very slow connection\nBasic browsing only';
+    if (speed < 1) return 'Very slow connection\nNot suitable for most tasks';
+    if (speed < 5) return 'slow connection\nBasic browsing only';
     if (speed < 15) return 'Average speed\nGood for HD video';
     if (speed < 50) return 'Fast connection\nGreat for streaming';
     if (speed < 100) return 'Very fast connection\nExcellent for 4K video';
