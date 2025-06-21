@@ -17,6 +17,7 @@ Future requestPermissions() async {
   await Permission.phone.request();
   await Permission.location.request();
   await Permission.backgroundRefresh.request();
+  await Permission.notification.request();
 }
 
 Future<LocationModel> getLocationName(double lat, double lon) async {

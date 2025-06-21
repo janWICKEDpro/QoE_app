@@ -82,6 +82,7 @@ Future<bool> onIosBackground(ServiceInstance service) async {
 void onStart(ServiceInstance service) async {
   DartPluginRegistrant.ensureInitialized();
   WidgetsFlutterBinding.ensureInitialized();
+  int init = 0;
   if (service is AndroidServiceInstance) {
     flutterLocalNotificationsPlugin.show(
       notificationId,
@@ -91,10 +92,9 @@ void onStart(ServiceInstance service) async {
         android: AndroidNotificationDetails(
           notificationChannelId,
           'QoE App Service',
-          icon:
-              'app_icon', // Make sure 'app_icon' exists in your Android drawables
-          ongoing: true, // Indicates that the service is running
-          priority: Priority.low, 
+          icon: 'app_icon',
+          ongoing: true,
+          priority: Priority.low,
         ),
       ),
     );
@@ -117,9 +117,13 @@ void onStart(ServiceInstance service) async {
     lg.log("Background Service: Service stopped.");
   });
 
-  // final String? sessionToken =
-  //     Supabase.instance.client.auth.currentSession?.accessToken;
-
+  dbMethods.listenToNewEvents().listen((e) {
+    if (init != 0) {
+      showNotification((e)['title'] as String, (e)['message'] as String);
+    }
+    init++;
+    lg.log("Background Service: Listening to new events.");
+  });
   List<double> successfulPingTimes = [];
   int packetsTransmitted = 0;
   int packetsReceived = 0;

@@ -10,7 +10,7 @@ class NetworkDashboardScreen extends StatefulWidget {
   const NetworkDashboardScreen({super.key});
 
   @override
-  _NetworkDashboardScreenState createState() => _NetworkDashboardScreenState();
+  State<NetworkDashboardScreen> createState() => _NetworkDashboardScreenState();
 }
 
 class _NetworkDashboardScreenState extends State<NetworkDashboardScreen> {
@@ -42,12 +42,11 @@ class _NetworkDashboardScreenState extends State<NetworkDashboardScreen> {
         actions: [
           IconButton(
             icon: const HugeIcon(
-              icon: HugeIcons.strokeRoundedSettings01,
+              icon: HugeIcons.strokeRoundedMessagePreview01,
               color: Colors.black,
               size: 30.0,
             ),
             onPressed: () {
-              //context.goNamed(RoutePath.settings);
               showISPRatingDialog(context);
             },
           ),
@@ -101,7 +100,9 @@ class _NetworkDashboardScreenState extends State<NetworkDashboardScreen> {
 
   Widget _buildSignalStrengthCard(NetworkInfoProvider networkInfo) {
     return Card(
+      surfaceTintColor: Colors.white,
       elevation: 2,
+      shadowColor: Colors.white70,
       shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(16)),
       child: Padding(
         padding: const EdgeInsets.all(20),
@@ -193,7 +194,9 @@ class _NetworkDashboardScreenState extends State<NetworkDashboardScreen> {
 
   Widget _buildSimInfoCard(NetworkInfoProvider networkInfo) {
     return Card(
+      surfaceTintColor: Colors.white,
       elevation: 2,
+      shadowColor: Colors.white70,
       shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(16)),
       child: Padding(
         padding: const EdgeInsets.all(20),
@@ -291,7 +294,9 @@ class _NetworkDashboardScreenState extends State<NetworkDashboardScreen> {
 
   Widget _buildDeviceInfoCard(NetworkInfoProvider networkInfo) {
     return Card(
+      surfaceTintColor: Colors.white,
       elevation: 2,
+      shadowColor: Colors.white70,
       shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(16)),
       child: Padding(
         padding: const EdgeInsets.all(20),

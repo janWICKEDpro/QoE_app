@@ -124,6 +124,7 @@ class DbMethods {
   }
 
   Stream<Map<String, dynamic>> listenToNewEvents() {
+    log("Started listening");
     return _supabaseClient
         .from('Event')
         .stream(primaryKey: ['id'])

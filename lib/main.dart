@@ -28,16 +28,18 @@ void main() async {
     SessionManager().init(),
     LocationService().initialize(),
   ]);
+  await requestPermissions();
   await Supabase.initialize(
     url: EnvironmentVariables.supabaseUrl,
     anonKey: EnvironmentVariables.supabaseAnonKey,
   );
   await configureLocalTimeZone();
+
   await initializeNotificationService();
   final backgroundService = BackgroundService();
   final auth = Auth();
   auth.anonymousLogin();
-  await requestPermissions();
+
   await backgroundService.initializeService();
 
   final router = RouterClass.instance;

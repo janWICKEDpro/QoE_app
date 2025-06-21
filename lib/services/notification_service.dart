@@ -44,7 +44,7 @@ void notificationTapBackground(NotificationResponse notificationResponse) {
   if (notificationResponse.input?.isNotEmpty ?? false) {}
 }
 
-Future<void> showNotification() async {
+Future<void> showNotification(String title, String message) async {
   const AndroidNotificationDetails androidNotificationDetails =
       AndroidNotificationDetails(
         'your channel id',
@@ -59,14 +59,17 @@ Future<void> showNotification() async {
   );
   await flutterLocalNotificationsPlugin.show(
     id++,
-    'Rate your experience',
-    'Please rate your experience with the app',
+    '$title',
+    '$message',
     notificationDetails,
     payload: 'item x',
   );
 }
 
-Future<void> showNotificationCustomSound() async {
+Future<void> showNotificationCustomSound({
+  String? title,
+  String? message,
+}) async {
   const AndroidNotificationDetails androidNotificationDetails =
       AndroidNotificationDetails(
         'your other channel id',
@@ -85,8 +88,8 @@ Future<void> showNotificationCustomSound() async {
   );
   await flutterLocalNotificationsPlugin.show(
     id++,
-    'Rate your experience',
-    'Rate your your experience with the app',
+    title ?? 'Rate your experience',
+    message ?? 'Rate your your experience with the app',
     notificationDetails,
   );
 }
