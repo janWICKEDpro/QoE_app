@@ -5,6 +5,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 import 'package:flutter_native_splash/flutter_native_splash.dart';
+import 'package:go_router/go_router.dart';
 import 'package:provider/provider.dart';
 import 'package:qoe_app/constants/env.dart';
 import 'package:qoe_app/data/local/session_manager.dart';
@@ -41,11 +42,11 @@ void main() async {
 
   final router = RouterClass.instance;
 
-  runApp(FeedbackApp(routes: router));
+  runApp(FeedbackApp(routes: router.getRoutes()));
 }
 
 class FeedbackApp extends StatelessWidget {
-  final RouterClass routes;
+  final GoRouter routes;
 
   const FeedbackApp({super.key, required this.routes});
 
@@ -66,7 +67,7 @@ class FeedbackApp extends StatelessWidget {
           colorScheme: ColorScheme.fromSeed(seedColor: Colors.deepPurple),
           useMaterial3: true,
         ),
-        routerConfig: routes.routes,
+        routerConfig: routes,
         debugShowCheckedModeBanner: false,
       ),
     );

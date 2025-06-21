@@ -348,7 +348,7 @@ void onStart(ServiceInstance service) async {
 Future<ConnectivityResult> _getNetworkType(Connectivity connectivity) async {
   try {
     final connectivityResult = await connectivity.checkConnectivity();
-    return connectivityResult.first;
+    return connectivityResult;
   } catch (e) {
     return ConnectivityResult.other;
   }

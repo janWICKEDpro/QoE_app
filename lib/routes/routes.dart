@@ -18,6 +18,7 @@ class RouterClass {
     return _instance!;
   }
 
+
   GoRouter getRoutes() {
     return GoRouter(
       debugLogDiagnostics: true,
