@@ -9,6 +9,7 @@ class Device {
   final int? numberOfSims;
   final String? token;
   final DateTime? updatedAt;
+  final String? identifier;
 
   Device({
     this.id,
@@ -21,6 +22,7 @@ class Device {
     this.numberOfSims,
     this.token,
     this.updatedAt,
+    this.identifier,
   });
 
   // Factory constructor to create a Device object from a JSON map (e.g., from Supabase)
@@ -42,6 +44,8 @@ class Device {
           json['updated_at'] != null
               ? DateTime.parse(json['updated_at'] as String)
               : null,
+      identifier:
+          json["identifier"] != null ? json["identifier"] as String : null,
     );
   }
 
@@ -58,6 +62,7 @@ class Device {
       'device_name': deviceName,
       'number_of_sims': numberOfSims,
       'token': token,
+      'device_identifier': identifier,
       // 'created_at' is usually set by Supabase's `now()` default value.
       // 'updated_at' might be handled by a trigger or `now()` default value.
       // If you need to manually set them, uncomment and handle DateTime to ISO 8601 string:

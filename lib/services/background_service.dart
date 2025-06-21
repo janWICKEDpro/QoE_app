@@ -13,6 +13,7 @@ import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 import 'package:network_type_detector/network_type_detector.dart';
 import 'package:qoe_app/constants/env.dart';
 import 'package:qoe_app/data/local/session_manager.dart';
+import 'package:qoe_app/services/notification_service.dart';
 import 'package:qoe_app/supabase/db_methods.dart';
 import 'package:qoe_app/utils/plugin.dart';
 import 'package:connectivity_plus/connectivity_plus.dart';
@@ -39,7 +40,6 @@ class BackgroundService {
   }
 
   Future<void> initializeService() async {
-    lg.log("Tried to initialize background service");
     final service = FlutterBackgroundService();
     const AndroidNotificationChannel channel = AndroidNotificationChannel(
       notificationChannelId,
@@ -82,17 +82,35 @@ Future<bool> onIosBackground(ServiceInstance service) async {
 void onStart(ServiceInstance service) async {
   DartPluginRegistrant.ensureInitialized();
   WidgetsFlutterBinding.ensureInitialized();
-  final SimCardInfo simCardInfo = SimCardInfo();
-  final LocationService locationService = LocationService();
+  if (service is AndroidServiceInstance) {
+    flutterLocalNotificationsPlugin.show(
+      notificationId,
+      'QoE Service',
+      'Service starting...', // Initial status message
+      const NotificationDetails(
+        android: AndroidNotificationDetails(
+          notificationChannelId,
+          'QoE App Service',
+          icon:
+              'app_icon', // Make sure 'app_icon' exists in your Android drawables
+          ongoing: true, // Indicates that the service is running
+          priority: Priority.low, 
+        ),
+      ),
+    );
+  }
   await dotenv.load(fileName: ".env");
-  await locationService.initialize();
   SessionManager().init();
   await Supabase.initialize(
     url: EnvironmentVariables.supabaseUrl,
     anonKey: EnvironmentVariables.supabaseAnonKey,
   );
-  final DbMethods dbMethods = DbMethods();
   lg.log("Background Service: Supabase initialized.");
+  final SimCardInfo simCardInfo = SimCardInfo();
+  final LocationService locationService = LocationService();
+
+  final DbMethods dbMethods = DbMethods();
+  await locationService.initialize();
 
   service.on('stop').listen((event) {
     service.stopSelf();
@@ -107,8 +125,11 @@ void onStart(ServiceInstance service) async {
   int packetsReceived = 0;
   StreamSubscription<PingData>? pingSubscription;
   bool processing = false;
-
+  Timer.periodic(const Duration(seconds: 100), (timer) {
+    showNotificationCustomSound();
+  });
   Timer.periodic(const Duration(seconds: 30), (timer) async {
+    if (SessionManager().deviceId() == 0) return;
     if (processing) {
       return;
     }
@@ -221,12 +242,9 @@ void onStart(ServiceInstance service) async {
               ((packetsTransmitted - packetsReceived) / packetsTransmitted) *
               100.0;
         } else {
-          calculatedPacketLoss =
-              100.0; // 100% loss if nothing was transmitted (shouldn't happen with count > 0)
+          calculatedPacketLoss = 100.0;
         }
 
-        // Bandwidth remains simulated unless you implement a separate throughput test
-        // Ping doesn't measure bandwidth.
         final Random random = Random();
         final double simulatedBandwidth =
             10 + random.nextDouble() * 90; // 10-100 Mbps
@@ -356,13 +374,13 @@ Stream<PingData> pingData() {
   return ping.stream;
 }
 
-double _calculateJitter(List<double> pings) {
-  if (pings.length < 2) return 0;
+// double _calculateJitter(List<double> pings) {
+//   if (pings.length < 2) return 0;
 
-  double sumDiff = 0;
-  for (int i = 1; i < pings.length; i++) {
-    sumDiff += (pings[i] - pings[i - 1]).abs();
-  }
+//   double sumDiff = 0;
+//   for (int i = 1; i < pings.length; i++) {
+//     sumDiff += (pings[i] - pings[i - 1]).abs();
+//   }
 
-  return sumDiff / (pings.length - 1);
-}
+//   return sumDiff / (pings.length - 1);
+// }

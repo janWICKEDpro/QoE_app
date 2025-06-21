@@ -76,3 +76,4 @@ Future<String?> fetchIpAddress() async {
     return null;
   }
 }
+

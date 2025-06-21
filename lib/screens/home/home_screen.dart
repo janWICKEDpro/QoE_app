@@ -75,7 +75,7 @@ class _HomeScreenState extends State<HomeScreen> {
           ),
           ElevatedButton(
             onPressed: () async {
-              await _showNotification();
+         //     await _showNotification();
             },
             child: Text("_showNotification"),
           ),
@@ -87,7 +87,7 @@ class _HomeScreenState extends State<HomeScreen> {
           ),
           ElevatedButton(
             onPressed: () async {
-              await _showNotificationCustomSound();
+           //   await _showNotificationCustomSound();
             },
             child: Text("_showNotificationCustomSound"),
           ),
@@ -102,31 +102,7 @@ class _HomeScreenState extends State<HomeScreen> {
     );
   }
 
-  Future<void> _showNotificationCustomSound() async {
-    const AndroidNotificationDetails androidNotificationDetails =
-        AndroidNotificationDetails(
-          'your other channel id',
-          'your other channel name',
-          channelDescription: 'your other channel description',
-          sound: RawResourceAndroidNotificationSound('slow_spring_board'),
-          priority: Priority.high,
-          importance: Importance.max,
-        );
-    const DarwinNotificationDetails darwinNotificationDetails =
-        DarwinNotificationDetails(sound: 'slow_spring_board.aiff');
-
-    final NotificationDetails notificationDetails = NotificationDetails(
-      android: androidNotificationDetails,
-      iOS: darwinNotificationDetails,
-      macOS: darwinNotificationDetails,
-    );
-    await flutterLocalNotificationsPlugin.show(
-      id++,
-      'custom sound notification title',
-      'custom sound notification body',
-      notificationDetails,
-    );
-  }
+  
 
   Future<void> _showInsistentNotification() async {
     // This value is from: https://developer.android.com/reference/android/app/Notification.html#FLAG_INSISTENT
@@ -153,27 +129,7 @@ class _HomeScreenState extends State<HomeScreen> {
     );
   }
 
-  Future<void> _showNotification() async {
-    const AndroidNotificationDetails androidNotificationDetails =
-        AndroidNotificationDetails(
-          'your channel id',
-          'your channel name',
-          channelDescription: 'your channel description',
-          importance: Importance.max,
-          priority: Priority.high,
-          ticker: 'ticker',
-        );
-    const NotificationDetails notificationDetails = NotificationDetails(
-      android: androidNotificationDetails,
-    );
-    await flutterLocalNotificationsPlugin.show(
-      id++,
-      'plain title',
-      'plain body',
-      notificationDetails,
-      payload: 'item x',
-    );
-  }
+
 
   Future<void> _zonedScheduleNotification() async {
     await flutterLocalNotificationsPlugin.zonedSchedule(

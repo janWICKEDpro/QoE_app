@@ -24,12 +24,28 @@ class DbMethods {
         return false;
       }
 
+      // If identifier is not "unknown", check if it exists in Supabase
+      if (device.identifier != "unknown") {
+        final List<Map<String, dynamic>> existingDevices = await _supabaseClient
+            .from('Device')
+            .select()
+            .eq('device_identifier', device.identifier!);
+
+        if (existingDevices.isNotEmpty) {
+          // Device already exists, update SessionManager and return
+          final existingDevice = existingDevices.first;
+          SessionManager().setHasRegisteredDevice(true);
+          SessionManager().setDeviceId(existingDevice['id']);
+          return true;
+        }
+      }
+
+      // Insert device (either identifier is "unknown" or not found in Supabase)
       final Map<String, dynamic> dataToInsert = {
         ...device.toJson(),
         'token': sessionToken,
       };
 
-      // Perform the insert operation
       final List<Map<String, dynamic>> response =
           await _supabaseClient.from('Device').insert(dataToInsert).select();
 

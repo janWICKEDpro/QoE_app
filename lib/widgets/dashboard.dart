@@ -1,8 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:go_router/go_router.dart';
 import 'package:hugeicons/hugeicons.dart';
 import 'package:provider/provider.dart';
-import 'package:qoe_app/routes/route_names.dart';
 import 'package:qoe_app/providers/network_info_provider.dart';
 import 'dart:io' show Platform;
 

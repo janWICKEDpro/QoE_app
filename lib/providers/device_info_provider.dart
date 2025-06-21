@@ -36,7 +36,6 @@ class DeviceInfoProvider with ChangeNotifier {
   }
 
   Future<void> fetchAndStoreDeviceInfo() async {
-    log("WE ARE HERE");
     _isLoading = true;
     _errorMessage = null;
     notifyListeners();
@@ -47,8 +46,10 @@ class DeviceInfoProvider with ChangeNotifier {
       int? numberOfSims = await _fetchNumberOfSims();
 
       Map<String, String?> deviceOsInfo = await _fetchDeviceOsInfo();
+      log("DEVICE INFO: $deviceOsInfo");
       String? deviceName = deviceOsInfo['deviceName'];
       String? osVersion = deviceOsInfo['osVersion'];
+      String? identifier = deviceOsInfo['device_identifier'];
       await _locationService.ensureLocationAvailable();
       _updateCurrentDeviceWithLocation();
       log("WE ARE HERE: GOT ALL INFO");
@@ -59,6 +60,7 @@ class DeviceInfoProvider with ChangeNotifier {
         latitude: _currentDevice?.latitude,
         deviceName: '$deviceName ($osVersion)',
         numberOfSims: numberOfSims,
+        identifier: identifier,
       );
 
       bool storedSuccessfully = await _dbMethods.storeDeviceInformation(
@@ -96,26 +98,36 @@ class DeviceInfoProvider with ChangeNotifier {
   Future<Map<String, String?>> _fetchDeviceOsInfo() async {
     String? deviceName;
     String? osVersion;
+    String? identifier;
 
     try {
       if (Platform.isAndroid) {
         AndroidDeviceInfo androidInfo = await _deviceInfoPlugin.androidInfo;
         deviceName = "${androidInfo.manufacturer} ${androidInfo.model}";
         osVersion = "Android ${androidInfo.version.release}";
+        identifier = androidInfo.id;
       } else if (Platform.isIOS) {
         IosDeviceInfo iosInfo = await _deviceInfoPlugin.iosInfo;
         deviceName = iosInfo.name;
         osVersion = "iOS ${iosInfo.systemVersion}";
+        identifier = iosInfo.identifierForVendor ?? "unkown";
       } else {
         deviceName = 'Unknown Device';
         osVersion = 'Unknown OS';
+        identifier = "unkown identifier";
       }
     } catch (e) {
       debugPrint('Error fetching device OS info: $e');
       deviceName = 'Error Device';
       osVersion = 'Error OS';
+      identifier = "unkown identifier";
     }
-    return {'deviceName': deviceName, 'osVersion': osVersion};
+
+    return {
+      'deviceName': deviceName,
+      'osVersion': osVersion,
+      'device_identifier': identifier,
+    };
   }
 
   void _updateCurrentDeviceWithLocation() {

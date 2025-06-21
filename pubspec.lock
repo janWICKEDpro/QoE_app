@@ -246,6 +246,14 @@ packages:
       url: "https://pub.dev"
     source: hosted
     version: "5.2.1"
+  flutter_internet_speed_test:
+    dependency: "direct main"
+    description:
+      name: flutter_internet_speed_test
+      sha256: "73952e4db062ee2887afd6b6d0f526b7292ad288b69b40dfa443a39d39f3d32d"
+      url: "https://pub.dev"
+    source: hosted
+    version: "1.0.1"
   flutter_lints:
     dependency: "direct dev"
     description:
@@ -909,6 +917,14 @@ packages:
       url: "https://pub.dev"
     source: hosted
     version: "0.10.1"
+  tuple:
+    dependency: transitive
+    description:
+      name: tuple
+      sha256: a97ce2013f240b2f3807bcbaf218765b6f301c3eff91092bcfa23a039e7dd151
+      url: "https://pub.dev"
+    source: hosted
+    version: "2.0.2"
   typed_data:
     dependency: transitive
     description:

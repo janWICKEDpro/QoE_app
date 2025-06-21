@@ -4,9 +4,9 @@ import 'package:flutter/material.dart';
 import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 import 'package:go_router/go_router.dart';
 import 'package:hugeicons/hugeicons.dart';
-import 'package:qoe_app/routes/route_names.dart';
 import 'package:qoe_app/services/notification_service.dart';
 import 'package:qoe_app/utils/plugin.dart';
+import 'package:qoe_app/widgets/rating_popup.dart';
 
 class Wrapper extends StatefulWidget {
   const Wrapper({super.key, required this.navigationShell});
@@ -60,12 +60,14 @@ class _WrapperState extends State<Wrapper> {
       await androidImplementation?.requestNotificationsPermission();
     }
   }
-  
+
   void _configureSelectNotificationSubject() {
     selectNotificationStream.stream.listen((
       NotificationResponse? response,
     ) async {
-      context.goNamed(RoutePath.speedTest);
+      WidgetsBinding.instance.addPostFrameCallback((_) {
+        showISPRatingDialog(context);
+      });
     });
   }
 
