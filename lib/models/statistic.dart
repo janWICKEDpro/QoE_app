@@ -1,16 +1,16 @@
 class Statistic {
-  final int? id; // Nullable for creation (auto-incremented by Supabase)
-  final DateTime? createdAt; // Nullable for creation (set by Supabase)
-  final int? deviceId; // Nullable as per Supabase table
-  final String? carrierName; // Nullable as per Supabase table
-  final double? jitter; // 'real' maps to double
-  final double? latency; // 'real' maps to double
-  final String? signalStrength; // 'text' maps to String
-  final double? packetLoss; // 'real' maps to double
-  final double? bandwidth; // 'real' maps to double
-  final String? locationName; // Nullable as per Supabase table
-  final double? longitude; // Renamed 'long' to 'longitude' for clarity in Dart
-  final double? latitude; // Renamed 'lat' to 'latitude' for clarity in Dart
+  final int? id; 
+  final DateTime? createdAt; 
+  final int? deviceId; 
+  final String? carrierName;
+  final double? jitter; 
+  final double? latency; 
+  final String? signalStrength; 
+  final double? packetLoss; 
+  final double? bandwidth; 
+  final String? locationName; 
+  final double? longitude; 
+  final double? latitude;
   final String? networkType;
   final String? ip;
 

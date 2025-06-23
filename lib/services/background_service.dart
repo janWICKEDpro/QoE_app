@@ -87,7 +87,7 @@ void onStart(ServiceInstance service) async {
     flutterLocalNotificationsPlugin.show(
       notificationId,
       'QoE Service',
-      'Service starting...', // Initial status message
+      'Service starting...', 
       const NotificationDetails(
         android: AndroidNotificationDetails(
           notificationChannelId,
