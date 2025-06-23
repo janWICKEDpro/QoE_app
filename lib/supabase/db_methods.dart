@@ -129,7 +129,7 @@ class DbMethods {
         .from('Event')
         .stream(primaryKey: ['id'])
         .order('created_at')
-        .map((events) => events.isNotEmpty ? events.last : null)
+        .map((events) => events.isNotEmpty ? events.first : null)
         .where((event) => event != null)
         .cast<Map<String, dynamic>>();
   }
